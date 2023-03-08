@@ -1,3 +1,5 @@
 *
 !init.el
+!custom
+!custom/*
 !.gitignore
