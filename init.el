@@ -1,3 +1,5 @@
+(setq shell-file-name "/bin/bash")
+
 ;; Add custom configs
 (add-to-list 'load-path "~/.emacs.d/custom/")
 
@@ -73,10 +75,19 @@
   :ensure t
   :config (require 'exwm-my-config))
 
+;; Dap mode
+(use-package dap-mode
+  :ensure t)
+
 ;; Python
-(use-package elpy
+(use-package lsp-pyright
   :ensure t
-  :init (elpy-enable))
+  :custom (dap-python-debugger 'debugpy)
+  :hook (python-mode . (lambda ()
+                          (require 'lsp-pyright)
+                          (lsp 'pyrigth)))
+  :config
+  (require 'dap-python))
 
 ;; Powershell
 (use-package powershell
@@ -92,7 +103,10 @@
   ;; :after (typescript-mode company flycheck)
   ;; :hook ((typescript-mode . tide-setup)
   ;;        (typescript-mode . tide-hl-identifier-mode)
-  ;;        (before-save . tide-format-before-save)))
+;;        (before-save . tide-format-before-save)))
+
+(use-package dockerfile-mode
+  :ensure t)
 
 (defun setup-tide-mode ()
   (interactive)
@@ -114,3 +128,6 @@
 
 ;; if you use typescript-mode
 (add-hook 'typescript-mode-hook #'setup-tide-mode)
+
+;; org mode
+(require 'ox-md)

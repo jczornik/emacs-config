@@ -22,7 +22,7 @@
             (start-process-shell-command
              "xrandr" nil "xrandr --output eDP1 --mode 1920x1080 --pos 2560x0 --rotate normal --output HDMI1 --primary --mode 2560x1440 --pos 0x0 --rotate normal")
 	    (setq exwm-randr-workspace-monitor-plist '(1 "HDMI1" 2 "HDMI1" 3 "HDMI1" 4 "HDMI1" 5 "HDMI1" 6 "eDP1" 7 "eDP1" 8 "eDP1" 9 "eDP1" 0 "eDP1" ))))
-;	    ))
+
 (exwm-randr-enable)
 
 ;; Set the initial number of workspaces (they can also be created later).
@@ -65,9 +65,6 @@
         ([?\s-&] . (lambda (command)
 		     (interactive (list (read-shell-command "$ ")))
 		     (start-process-shell-command command nil command)))
-	([?\s-`] . (lambda ()
-		     (interactive)
-		     (start-process-shell-command "logout" nil "/usr/bin/pkill -KILL -u jczornik")))
 	([?\s-b] . (lambda ()
 		     (interactive)
 		     (start-process-shell-command "chromium" nil "chromium")))
@@ -85,13 +82,10 @@
 		     (start-process-shell-command "mute volume" nil "pactl set-sink-volume @DEFAULT_SINK@ toggle")))
 	([s-<XF86AudioMicMute>] . (lambda ()
 		     (interactive)
-		     (start-process-shell-command "mute volume" nil "pactl set-source-mute @DEFAULT_SOURCE@ toggle")))))
-        ;; ([s-escape] . (lambda ()
-	;; 	    (interactive)
-	;; 	    (start-process "" nil "/usr/bin/xset s activate")))))
-	;; ([?\s-`] . (lambda ()
-	;; 	    (interactive)
-	;; 	    (start-process "" nil "/usr/bin/xkill -KILL -u $(/usr/bin/whoami)")))))
+		     (start-process-shell-command "mute volume" nil "pactl set-source-mute @DEFAULT_SOURCE@ toggle")))
+        ([s-escape] . (lambda ()
+		     (interactive)
+		     (start-process-shell-command "" nil "/usr/bin/xset s activate")))))
 
 ;; To add a key binding only available in line-mode, simply define it in
 ;; `exwm-mode-map'.  The following example shortens 'C-c q' to 'C-q'.
@@ -124,6 +118,13 @@
         ;; search
         ([?\C-s] . [?\C-f])))
 
+(add-hook 'exwm-manage-finish-hook
+          (lambda ()
+            (when (and exwm-class-name
+                       (string= exwm-class-name "Chromium"))
+              (exwm-input-set-local-simulation-keys nil))))
+
+
 ;; You can hide the minibuffer and echo area when they're not used, by
 ;; uncommenting the following line.
 ;(setq exwm-workspace-minibuffer-position 'bottom)
@@ -131,3 +132,11 @@
 ;; Do not forget to enable EXWM. It will start by itself when things are
 ;; ready.  You can put it _anywhere_ in your configuration.
 (exwm-enable)
+
+
+(defun work-monitor-aligment ()
+  "Set monitor aligment at work"
+  (interactive)
+  (start-process-shell-command "" nil
+   "xrandr --output eDP1 --primary --mode 1920x1080 --pos 0x1080 --rotate normal --output HDMI1 --mode 1920x1080 --pos 0x0 --rotate normal")
+  (setq exwm-randr-workspace-monitor-plist '(6 "HDMI1" 7 "HDMI1" 8 "HDMI1" 9 "HDMI1" 0 "HDMI1" 1 "eDP1" 2 "eDP1" 3 "eDP1" 4 "eDP1" 5 "eDP1" )))
