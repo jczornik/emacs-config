@@ -1,4 +1,7 @@
 (setq shell-file-name "/bin/bash")
+(setq exec-path (append exec-path '("~/.local/bin")))
+
+(yas-global-mode 1)
 
 ;; Add custom configs
 (add-to-list 'load-path "~/.emacs.d/custom/")
@@ -52,6 +55,15 @@
 ;; Enable ido
 (use-package ido)
 (ido-mode t)
+
+;; Multiple cursors
+(use-package multiple-cursors
+  :ensure t
+  :bind
+  (("C-s-c C-s-c" . mc/edit-lines)
+   ("C->" . mc/mark-next-like-this)
+   ("C-<" . mc/mark-previous-like-this)
+   ("C-c C-<" . mc/mark-all-like-this)))
 
 ;; Enable smax
 (use-package smex
@@ -128,6 +140,17 @@
 
 ;; if you use typescript-mode
 (add-hook 'typescript-mode-hook #'setup-tide-mode)
+
+;; rust config
+(use-package rust-mode
+  :ensure t
+  :init
+  (setq indent-tabs-mode nil)
+  (setq rust-format-on-save t)
+  :config
+  (prettify-symbols-mode)
+  :hook (rust-mode . lsp))
+
 
 ;; org mode
 (require 'ox-md)
