@@ -4,7 +4,7 @@
 (yas-global-mode 1)
 
 ;; Add custom configs
-(add-to-list 'load-path "~/.emacs.d/custom/")
+;;(add-to-list 'load-path "~/.emacs.d/custom/")
 
 ;; Define the init file
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -83,9 +83,9 @@
   :ensure t)
 
 ;; Window manager in emacs
-(use-package exwm
-  :ensure t
-  :config (require 'exwm-my-config))
+;; (use-package exwm
+;;   :ensure t
+;;   :config (require 'exwm-my-config))
 
 ;; Dap mode
 (use-package dap-mode
@@ -154,3 +154,6 @@
 
 ;; org mode
 (require 'ox-md)
+
+(use-package restclient
+   :ensure t)
